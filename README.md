@@ -1,68 +1,104 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# PagePress 📃 ⚛️
+JavaScript WordPress clone by William Bray
+___
+## 📚 The Stack
 
-## Available Scripts
+### Frontend:
 
-In the project directory, you can run:
+- ⚛️ [React](https://reactjs.org/) - Frontend Javascript Library of choice. - Component based to keep rendering lightweight and quick when using the app.
 
-### `npm start`
+- 🌠 [React-Apollo](https://github.com/apollographql/react-apollo) for interfacing with Apollo Client
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- 💅🏻 [Styled-Components](https://www.styled-components.com/) to make styling a breeze.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- 🚀 [Apollo Client](https://www.apollographql.com/) - Performing GraphQL Mutations - Fetching GraphQL Queries - Caching GraphQL Data - Managing Local State - Error and Loading UI States - Apollo replaces the need for Redux + Data fetching & caching libraries
 
-### `npm test`
+### Backend:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- 🧘🏻‍♀️ [GraphQL Yoga](https://github.com/prisma/graphql-yoga) - Implementing Query and Mutation Resolvers - Custom server side logic - Performing JWT Authentication - Permission checking
 
-### `npm run build`
+- 🌈 [Prisma](https://www.prisma.io/) - Provides set of GraphQL CRUD APIs for MySQL database. - Schema Definition - Data Relationships - Queried directly from yoga server - Self-hosted or as-a-service.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## 🚀 Getting started with PagePress Development
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+There are a few prerequisite required to create a development environment and without them you'll struggle:
 
-### `npm run eject`
+- Git - Required for source control
+- Node
+- NPM / Yarn - Personal Choice of package manager for installing and running modules
+- GraphQL - Query Language CLI tools
+- Docker - Running the development instance
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Once you have all the required prerequisites installed on your machine grab a copy of the most recent version of PagePress
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+ $ git clone https://github.com/search4local-ltd/PagePress
+ $ cd PagePress
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Once we have a local clone of the repository for development we need to install our node packages locally to ensure everything works as required.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+ $ cd frontend
+ $ npm install
 
-## Learn More
+ ### Allow npm to install frontend packages...
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+ $ cd ../backend
+ $ npm install
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
 
-### Code Splitting
+### 🧮 Backend Environment Variables
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+Before we can start up our development server we will need to create a `variables.env` file within `/backend` and insert our environment variables.
 
-### Analyzing the Bundle Size
+```
+ $ cd backend
+ $ touch variables.env
+ $ nano variables.env
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+We can just copy and paste these values into our `variables.env` file:
 
-### Making a Progressive Web App
+```
+FRONTEND_URL="http://localhost"
+PRISMA_ENDPOINT="http://prisma:5577"
+PRISMA_SECRET="a1s2d3f4g5h6j7k8l9"
+APP_SECRET="jwtsecret123"
+PORT=4466
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Save the file and exit nano.
 
-### Advanced Configuration
+### 🏃🏻‍♂️ Composing and starting the environment
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+Before we can launch our services we need to set up the `.env` file for the whole application. This currently contains our MySQL variables for our database. In the root directory of the app, create a `.env` file and for the development environment, paste the following:
+```
+MYSQL_HOST=mysql
+MYSQL_USER=root
+MYSQL_PASS=prisma
+```
+These values are used by the `docker-compose.prod.yml` and `docker-compose.dev.yml` files to connect to the database.
 
-### Deployment
+NOTE: LIVE DATABASE VALUES ARE A SECRET AND SHOULD NOT BE PASSED OUT OR HARDCODED.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+```
+ $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+```
 
-### `npm run build` fails to minify
+Tip: Might be a good idea to create an alias for this command so you don't have to run it all the time! For example:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+```
+ alias PagePressdev='printf "\n>>> Composing PagePress DEV environment\n\n" && docker-compose -f docker-compose.yml -f docker-compose.dev.yml up'
+```
+
+If this is your first time launching the services you will need to wait until the services are up and then run `prisma deploy` in your `backend` directory. This will upload the schema to the mysql endpoint.
+
+Your local development server will now be up and running at: `http://localhost` and if needed the port is: `8080`
+
+That's it! We will now be able to start dev'ing away to our hearts content on PagePress.
+
+Happy Developing! 🤟🏻 🚀 💻
