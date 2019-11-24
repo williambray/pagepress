@@ -1,0 +1,26 @@
+version: "3.4"
+services:
+  server:
+    container_name: backend
+    build: ./backend
+    restart: always
+    ports:
+      - "4466:4466"
+    networks:
+      - pagepress_net
+  client:
+    container_name: frontend
+    build: ./frontend
+    restart: always
+    links:
+      - "server"
+    ports:
+      - "80:3000"
+    networks:
+      - pagepress_net
+    depends_on:
+      - server
+
+networks:
+  pagepress_net:
+    driver: bridge

@@ -1,0 +1,52 @@
+version: "3.4"
+services:
+  server:
+    command: npm run dev
+    expose:
+      - "4466"
+    volumes:
+      - ./backend:/backend
+    environment:
+      - NODE_ENV=development
+  client:
+    command: npm run start
+    expose:
+      - "3000"
+    volumes:
+      - ./frontend:/frontend
+    environment:
+      - NODE_ENV=development
+  prisma:
+    container_name: prisma
+    image: prismagraphql/prisma:1.34
+    restart: always
+    ports:
+      - "5577:5577"
+    networks:
+      - pagepress_net
+    environment:
+      PRISMA_CONFIG: |
+        port: 5577
+        databases:
+          default:
+            connector: mysql
+            host: ${MYSQL_HOST}
+            user: ${MYSQL_USER}
+            password: ${MYSQL_PASS}
+            rawAccess: true
+            port: 3306
+            migrations: true
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASS}
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - pagepress_net
+volumes:
+  mysql:

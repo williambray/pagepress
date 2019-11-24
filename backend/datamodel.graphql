@@ -1,0 +1,16 @@
+# import * from './generated/prisma.graphql
+
+enum Role {
+	ADMIN
+	USER
+}
+
+type User {
+  id: ID! @id
+	name: String!
+	email: String! @unique
+	password: String!
+	resetToken: String
+	resetTokenExpiry: Float
+	role: Role!
+}
